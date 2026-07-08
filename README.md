@@ -18,7 +18,7 @@ The pipeline covers:
 - `analiza_eeg_duzy.ipynb` — low-memory workflow for a large EDF file using cropped windows.
 - `inventory_table.csv` — example inventory export.
 - `figures/` — figures generated from the smaller-file workflow.
-- `figures2/` — figures and exports generated from the large-file workflow.
+
 
 ## Environment setup
 
