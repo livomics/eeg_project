@@ -1,6 +1,6 @@
-# EEG Analysis Workflow for CZD Data (Intern 1)
+# EEG Analysis Workflow for CZD Data 
 
-This repository contains a reproducible EEG analysis workflow for CZD EDF recordings, focused on the work completed by Intern 1.
+This repository contains a reproducible EEG analysis workflow for CZD EDF recordings.
 
 The pipeline covers:
 - loading EDF metadata without full preload,
@@ -30,7 +30,6 @@ conda activate eeg
 pip install mne pyedflib numpy scipy pandas matplotlib jupyterlab yasa
 ```
 
-If `pip` refuses on Linux, add `--break-system-packages`.
 
 Optional tools:
 - EDFbrowser for visual inspection of EDF files.
