@@ -69,22 +69,23 @@ Steps include:
 
 ### 2. Large-file workflow
 
-Use `analiza_eeg_duzy.ipynb` for the larger EDF file.
+Use `bipolar_pipeline.ipynb` for the larger EDF file.
 
 This version is designed for very large recordings and uses a low-memory strategy:
-- process only cropped windows (for example: start, middle, end),
+- process only cropped windows (for now: start, middle, end),
 - keep `preload=False`,
-- read only small data fragments at a time,
-- extract annotations from EDF headers if present,
-- optionally try to export events from `EVENTS.MDB` using `mdb-export`,
-- generate a spectrogram for one window.
+- reads only small data fragments at a time,
+- generates spectrograms for one window but for all bipolar channels.
+
+## Falied codes
+for mac save.fig didn't work
+for wsl laptop using raw = mne.io.read_raw_edf(edf_path, preload=False) didn't work, too much memory was needed
+RIP6-RIP9 isn't a bipolar channel - the difference is bigger than 1
+
 
 ## Notes
-
-- EDF annotations are normal and may appear as an extra channel; they are often useful as event markers.
-- `EVENTS.MDB` is optional and is not created by this workflow automatically.
-- For very large files, avoid loading the full recording into memory in one step.
-- The large-file workflow is intentionally conservative and should be run as a test first before scaling further.
+-filtering didn't really change the output - so the signal is very good suppousdly
+-noisy channels aren't here?
 
 ## Expected outputs
 
