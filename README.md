@@ -50,10 +50,10 @@ python -c "import mne; print(mne.__version__)"
 
 ### 1. Small-file inspection
 
-Use [analiza_eeg.ipynb](analiza_eeg.ipynb) for the first pass on the smaller CZD EDF file.
+Use [analisys_short_file.ipynb](analisys_short_file.ipynb) for the first pass on the smaller CZD EDF file.
 
 Steps include:
-1. Read the EDF header with `mne.io.read_raw_edf(..., preload=False)`.
+1. Read the EDF header with `mne.io.read_raw_edf(..., preload=False)` and remember to change paths accordingly.
 2. Save an inventory table with:
    - number of channels,
    - channel names,
@@ -70,13 +70,13 @@ Steps include:
 
 ### 2. Updated large-file workflow
 
-Use [bipolar_pipeline.ipynb](bipolar_pipeline.ipynb) for the larger EDF file.
+Use [analisys_long_file.ipynb](analisys_long_file.ipynb) for the larger EDF file.
 
-This version is designed for very large recordings and uses a low-memory strategy:
+This version is designed for only one large recordings and uses a low-memory strategy:
 - process only cropped windows (currently start, middle, and end),
 - keep `preload=False`,
 - read only small data fragments at a time,
-- build bipolar channels from neighboring electrodes,
+- build bipolar channels from neighboring electrodes and filter,
 - generate summaries for channel quality and signal behavior,
 - export outputs for later review.
 
@@ -93,17 +93,12 @@ What is happening in the updated bipolar pipeline:
 These are the main points still under discussion:
 
 - Annotation durations: many annotation rows currently show a duration of `0.0` seconds. This should be clarified. Is this expected from the export format, or are the original events supposed to have a non-zero duration?
-- Noise assessment: what should a noisy channel look like? We should define this clearly
-  - broadband high-amplitude artifact,
-  - repeated spikes or bursts,
-  - flat or clipped activity,
-  - sudden electrode-pop-like events.
+- Noise assessment: what should a noisy channel look like? 
 - Channel quality: the current workflow assumes that all channels are acceptable, but this should be verified. Are there any channels that look suspicious even if they are not marked as noisy?
 - Parameters: the exact preprocessing parameters should be documented, including filter settings, window length, and any thresholding rules used in the QC step.
 - Units and scaling: confirm whether the EDF data are stored in microvolts or another unit, and whether any unit conversion or scaling is needed.
 - Duration mismatch: compare the duration reported in the EDF header with the duration implied by the annotations and the recording timeline. Differences may reflect gaps, truncation, or missing segments.
 - channels such as `RM 6` to `RM 9` we eliminatied
-- Annotation format: the current CSV format is acceptable for a quick review, but a more structured table could help later, for example with columns for event type, onset, offset, duration, and notes.
 
 ## Known issues / observations
 
