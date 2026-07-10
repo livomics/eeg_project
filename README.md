@@ -16,11 +16,13 @@ The workflow covers:
 
 ## Repository contents
 
-- [analiza_eeg.ipynb](analiza_eeg.ipynb) — first-pass workflow for the smaller CZD EDF file.
-- [bipolar_pipeline.ipynb](bipolar_pipeline.ipynb) — updated low-memory workflow for the larger EDF file.
+- [SOZ_analisys.ipynb](SOZ_analisys.ipynb) — main notebook for processing EDF files, extracting annotations, finding seizure events, and exporting bipolar trace/PSD outputs for each seizure window.
+- [analisys_short_file.ipynb](analisys_short_file.ipynb) — first-pass workflow for a shorter EDF file.
+- [analisys_long_file.ipynb](analisys_long_file.ipynb) — larger-file workflow with cropped windows and low-memory processing.
 - [inventory_table.csv](inventory_table.csv) — example inventory export.
 - [tables](tables) — exported CSV summaries and annotation tables.
-- [figures](figures) — figures generated from the analysis workflow.
+- [figures](figures) — figures generated during the analysis workflow.
+- [SOZ](SOZ) — per-file and per-seizure output folders created by the SOZ analysis notebook.
 
 ## Environment setup
 
@@ -48,9 +50,9 @@ python -c "import mne; print(mne.__version__)"
 
 ## Workflow overview
 
-### 1. Small-file inspection
+### 1. Short-file inspection
 
-Use [analisys_short_file.ipynb](analisys_short_file.ipynb) for the first pass on the smaller CZD EDF file.
+Use [analisys_short_file.ipynb](analisys_short_file.ipynb) for the first pass on a shorter EDF file.
 
 Steps include:
 1. Read the EDF header with `mne.io.read_raw_edf(..., preload=False)` and remember to change paths accordingly.
@@ -68,11 +70,11 @@ Steps include:
 7. Create a per-channel summary table for flat, railed, and noisy channels.
 8. Save figures and tables.
 
-### 2. Updated large-file workflow
+### 2. Long-file workflow
 
 Use [analisys_long_file.ipynb](analisys_long_file.ipynb) for the larger EDF file.
 
-This version is designed for only one large recordings and uses a low-memory strategy:
+This version is designed for one large recording and uses a low-memory strategy:
 - process only cropped windows (currently start, middle, and end),
 - keep `preload=False`,
 - read only small data fragments at a time,
@@ -80,13 +82,20 @@ This version is designed for only one large recordings and uses a low-memory str
 - generate summaries for channel quality and signal behavior,
 - export outputs for later review.
 
-What is happening in the updated bipolar pipeline:
-- the EDF is opened in a memory-safe way,
-- analysis windows are defined across the recording,
-- a subset of data is loaded for inspection,
-- the bipolar montage is created from adjacent contacts with filtration,
-- plots and summaries are generated for each channel or channel pair,
-- annotations are exported for review and possible SOZ analysis.
+### 3. SOZ-focused seizure analysis
+
+Use [SOZ_analisys.ipynb](SOZ_analisys.ipynb) for a more structured workflow that targets seizure-related windows.
+
+This notebook:
+- loops over EDF files in a chosen data folder,
+- reads annotations and stores them in per-file CSV inventories,
+- detects events whose descriptions contain `NAPAD`,
+- creates a 40 s window around each seizure onset,
+- applies notch and band-pass filtering,
+- builds a bipolar montage from adjacent electrodes,
+- saves bipolar trace plots, PSD plots, and per-seizure output folders under [SOZ](SOZ).
+
+The notebook expects you to update the EDF input path to match your local filesystem before running it.
 
 ## Current questions and notes
 
@@ -99,6 +108,15 @@ These are the main points still under discussion:
 - Units and scaling: confirm whether the EDF data are stored in microvolts or another unit, and whether any unit conversion or scaling is needed.
 - Duration mismatch: compare the duration reported in the EDF header with the duration implied by the annotations and the recording timeline. Differences may reflect gaps, truncation, or missing segments.
 - channels such as `RM 6` to `RM 9` we eliminatied
+
+### Channel Filtering & Quality Control
+
+During seizures, physical movement can cause some electrodes to lose contact or fall off completely. These disconnected channels record no physiological activity (resulting in flatlines or numerical zeros) and are not useful for localization or imaging. 
+
+To maintain data integrity:
+* The processing pipeline automatically detects these flat/invalid channels by scanning for near-zero power in the Power Spectral Density (PSD) analysis.
+* These broken channels are dynamically filtered out and excluded from subsequent steps, such as spectrogram generation, to save computation time and keep the output clean.
+* While the code can be modified to log the specific names of these dropped channels, this information is treated as redundant for the primary localization objectives of this analysis.
 
 ## Known issues / observations
 
