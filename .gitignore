@@ -2,3 +2,6 @@ config.py
 *.edf
 .DS_Store
 .ipynb_checkpoints/
+config.example.py
+SOZ/
+config.py
