@@ -1,0 +1,25 @@
+onset_s,duration_s,description
+3.149,0.0,50
+6.037,0.0,30
+10.003,0.0,CZD-EEG-ANALIZA
+10.003,0.0,KlNeu
+10.011,0.0,CZD-EEG-ANALIZA
+10.011,0.0,KlNeu
+49.744,0.0,Via physical button
+146.19,0.0,Via physical button
+639.836,0.0,CZD-EEG-ANALIZA
+659.839,0.0,CZD-EEG-ANALIZA
+2181.23,0.0,1
+2524.995,0.0,NAPAD
+2584.312,0.0,1
+2584.358,0.0,Via physical button
+9175.044,0.0,1
+10123.66,0.0,Bipolar
+11609.0,0.0,<Gap Begin>
+11609.193,0.0,1
+11690.3,0.0,<Gap End>
+13871.5,0.0,<Gap Begin>
+15240.8,0.0,<Gap End>
+24189.643,0.0,1
+24189.685,0.0,Via physical button
+24415.844,0.0,1
