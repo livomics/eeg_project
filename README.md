@@ -47,6 +47,8 @@ python -c "import mne; print(mne.__version__)"
 
 ## Workflow overview
 
+change the [config.example.py](config.example.py) to config.py file based on your edf files location, do this once - it will not be added to git
+
 ### 1. Short-file inspection
 
 Use [analisys_short_file.ipynb](analisys_short_file.ipynb) for the initial inspection of a shorter EDF recording.
