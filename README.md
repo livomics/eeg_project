@@ -80,11 +80,12 @@ This notebook:
 2. Reads EDF annotations and exports them as per-recording CSV inventories.
 3. Detects seizure events whose descriptions contain `NAPAD`.
 4. Extracts a 90-second analysis window for each seizure (60 seconds before onset and 30 seconds after onset).
-5. Applies notch filtering (50, 100, and 150 Hz) followed by a 1–70 Hz band-pass filter.
+5. Applies notch filtering (50Hz and it's harmonics) followed by a 1–250 Hz band-pass filter.
 6. Creates a bipolar montage by pairing adjacent contacts from the same electrode.
 7. Computes the Power Spectral Density (PSD) for all bipolar channels.
 8. Automatically detects disconnected or flat channels based on PSD and excludes them from further spectral analysis.
 9. Exports PSD figures, annotation tables, and per-seizure analysis results to the [SOZ](SOZ) directory.
+10. Takes a spectogram of every channel for every seizure.
 
 ## Current questions and notes
 
