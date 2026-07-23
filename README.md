@@ -1,24 +1,21 @@
 # EEG Analysis Workflow for CZD Data
 
-This repository contains a reproducible EEG analysis workflow for CZD EDF recordings. The current focus is to inspect the recording, build a bipolar montage, summarize channel quality, and explore candidate seizure-onset zone (SOZ) channels.
+This repository contains a reproducible EEG analysis workflow for CZD EDF recordings. The project focuses on automated preprocessing, seizure-window extraction, bipolar montage generation, spectral analysis, and visualization to support seizure onset zone (SOZ) exploration.
 
 ## Overview
 
-The workflow covers:
-- loading EDF metadata without fully preloading the file,
-- inspecting the recording inventory,
-- plotting raw EEG traces and power spectra,
-- applying basic preprocessing (notch and band-pass filtering),
-- building bipolar channels from adjacent electrodes,
-- summarizing channel quality,
-- processing large recordings with cropped windows,
-- exporting annotations and optional event markers.
+This repository contains two complementary EEG analysis workflows for CZD EDF recordings:
+
+- `analisys_short_file.ipynb` for initial inspection of a shorter recording, including metadata review, bipolar montage generation, inspection of eeg trace signals and PSD before and after filtering,, and basic channel-quality assessment;
+- `SOZ_analisys.ipynb` implements an automated seizure-analysis workflow for multiple EDF recordings. It extracts annotations, detects seizure events (`NAPAD`), creates seizure-centered windows, applies signal preprocessing, constructs a bipolar montage, computes PSD, detects disconnected channels, and exports per-recording and per-seizure results.
+
+The workflow is designed to support reproducible exploration of SEEG recordings and candidate seizure onset zone (SOZ) channels while keeping large EDF datasets outside the Git repository by using a local config.py configuration.
 
 ## Repository contents
 
-- [SOZ_analisys.ipynb](SOZ_analisys.ipynb) — main notebook for processing EDF files, extracting annotations, finding seizure events, and exporting bipolar trace/PSD outputs for each seizure window.
-- [analisys_short_file.ipynb](analisys_short_file.ipynb) — first-pass workflow for a shorter EDF file.
-- [analisys_long_file.ipynb](analisys_long_file.ipynb) — larger-file workflow with cropped windows and low-memory processing.
+- [SOZ_analisys.ipynb](SOZ_analisys.ipynb) — main notebook implementing the complete seizure-focused analysis workflow.
+- [analisys_short_file.ipynb](analisys_short_file.ipynb) — exploratory notebook for the initial inspection of EDF recordings.
+- [config.example.py](config.example.py) — example local configuration file defining the EDF data directory.
 - [inventory_table.csv](inventory_table.csv) — example inventory export.
 - [tables](tables) — exported CSV summaries and annotation tables.
 - [figures](figures) — figures generated during the analysis workflow.
@@ -52,50 +49,43 @@ python -c "import mne; print(mne.__version__)"
 
 ### 1. Short-file inspection
 
-Use [analisys_short_file.ipynb](analisys_short_file.ipynb) for the first pass on a shorter EDF file.
+Use [analisys_short_file.ipynb](analisys_short_file.ipynb) for the initial inspection of a shorter EDF recording.
 
 Steps include:
-1. Read the EDF header with `mne.io.read_raw_edf(..., preload=False)` and remember to change paths accordingly.
-2. Save an inventory table with:
+
+1. Read the EDF file with `mne.io.read_raw_edf(..., preload=False)` using the data path defined in the local configuration.
+2. Save an inventory table containing:
    - number of channels,
    - channel names,
    - sampling frequency,
-   - duration,
+   - recording duration,
    - start time,
-   - units.
-3. Crop a short window (for example 30 s), load it into memory, and plot a subset of channels.
-4. Apply a notch filter at 50 Hz and harmonics, plus a band-pass filter.
-5. Compute and inspect power spectral density (PSD).
-6. Build a bipolar montage within electrodes.
-7. Create a per-channel summary table for flat, railed, and noisy channels.
-8. Save figures and tables.
+   - signal units.
+3. Crop a short window, currently 90 seconds, load it into memory.
+4. Build a bipolar montage using adjacent contacts from the same electrode. Save the trace EEG
+5. Compute and save the PSD of the unfiltered bipolar signal.
+6. Apply notch filtering at 50 and it's harmonics and apply the selected frequency filter - for now 1-250Hz.
+7. Plot the filtered signal and compute its PSD for comparison with the unfiltered data.
+8. Compare selected channels and review activity in standard frequency bands.
+9. Create a per-channel summary table for flat, saturated, and high-noise channels.
+10. Save figures and channel-quality results.
 
-### 2. Long-file workflow
+### 2. SOZ-focused seizure analysis
 
-Use [analisys_long_file.ipynb](analisys_long_file.ipynb) for the larger EDF file.
-
-This version is designed for one large recording and uses a low-memory strategy:
-- process only cropped windows (currently start, middle, and end),
-- keep `preload=False`,
-- read only small data fragments at a time,
-- build bipolar channels from neighboring electrodes and filter,
-- generate summaries for channel quality and signal behavior,
-- export outputs for later review.
-
-### 3. SOZ-focused seizure analysis
-
-Use [SOZ_analisys.ipynb](SOZ_analisys.ipynb) for a more structured workflow that targets seizure-related windows.
+Use [SOZ_analisys.ipynb](SOZ_analisys.ipynb) for automated seizure-focused analysis of multiple EDF recordings.
 
 This notebook:
-- loops over EDF files in a chosen data folder,
-- reads annotations and stores them in per-file CSV inventories,
-- detects events whose descriptions contain `NAPAD`,
-- creates a 40 s window around each seizure onset,
-- applies notch and band-pass filtering,
-- builds a bipolar montage from adjacent electrodes,
-- saves bipolar trace plots, PSD plots, and per-seizure output folders under [SOZ](SOZ).
 
-The notebook expects you to update the EDF input path to match your local filesystem before running it.
+1. Loads all EDF files from the directory specified in `config.py`.
+2. Reads EDF annotations and exports them as per-recording CSV inventories.
+3. Detects seizure events whose descriptions contain `NAPAD`.
+4. Extracts a 90-second analysis window for each seizure (60 seconds before onset and 30 seconds after onset).
+5. Applies notch filtering (50Hz and it's harmonics) followed by a 1–250 Hz band-pass filter.
+6. Creates a bipolar montage by pairing adjacent contacts from the same electrode.
+7. Computes the Power Spectral Density (PSD) for all bipolar channels.
+8. Automatically detects disconnected or flat channels based on PSD and excludes them from further spectral analysis.
+9. Exports PSD figures, annotation tables, and per-seizure analysis results to the [SOZ](SOZ) directory.
+10. Takes a spectogram of every channel for every seizure.
 
 ## Current questions and notes
 
