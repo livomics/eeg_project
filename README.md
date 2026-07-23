@@ -61,12 +61,12 @@ Steps include:
    - recording duration,
    - start time,
    - signal units.
-3. Crop a short window, currently 90 seconds, load it into memory, and inspect a subset of channels.
-4. Compute and save the PSD of the unfiltered signal.
-5. Apply notch filtering at 50, 100, and 150 Hz and apply the selected frequency filter.
-6. Plot the filtered signal and compute its PSD for comparison with the unfiltered data.
-7. Compare selected channels and review activity in standard frequency bands.
-8. Build a bipolar montage using adjacent contacts from the same electrode.
+3. Crop a short window, currently 90 seconds, load it into memory.
+4. Build a bipolar montage using adjacent contacts from the same electrode. Save the trace EEG
+5. Compute and save the PSD of the unfiltered bipolar signal.
+6. Apply notch filtering at 50 and it's harmonics and apply the selected frequency filter - for now 1-250Hz.
+7. Plot the filtered signal and compute its PSD for comparison with the unfiltered data.
+8. Compare selected channels and review activity in standard frequency bands.
 9. Create a per-channel summary table for flat, saturated, and high-noise channels.
 10. Save figures and channel-quality results.
 
