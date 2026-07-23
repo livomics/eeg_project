@@ -6,7 +6,7 @@ This repository contains a reproducible EEG analysis workflow for CZD EDF record
 
 This repository contains two complementary EEG analysis workflows for CZD EDF recordings:
 
-- `analisys_short_file.ipynb` for initial inspection of a shorter recording, including metadata review, inspection of raw and filtered signals, PSD analysis before and after filtering, bipolar montage generation, and basic channel-quality assessment;
+- `analisys_short_file.ipynb` for initial inspection of a shorter recording, including metadata review, bipolar montage generation, inspection of eeg trace signals and PSD before and after filtering,, and basic channel-quality assessment;
 - `SOZ_analisys.ipynb` implements an automated seizure-analysis workflow for multiple EDF recordings. It extracts annotations, detects seizure events (`NAPAD`), creates seizure-centered windows, applies signal preprocessing, constructs a bipolar montage, computes PSD, detects disconnected channels, and exports per-recording and per-seizure results.
 
 The workflow is designed to support reproducible exploration of SEEG recordings and candidate seizure onset zone (SOZ) channels while keeping large EDF datasets outside the Git repository by using a local config.py configuration.
