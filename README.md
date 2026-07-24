@@ -19,7 +19,7 @@ The workflow is designed to support reproducible exploration of SEEG recordings 
 - [inventory_table.csv](inventory_table.csv) — example inventory export.
 - [tables](tables) — exported CSV summaries and annotation tables.
 - [figures](figures) — figures generated during the analysis workflow.
-- [SOZ](SOZ) — per-file and per-seizure output folders created by the SOZ analysis notebook.
+- [SOZ](SOZ) — per-file and per-seizure output folders created by the SOZ analysis notebook, without spectograms.
 
 ## Environment setup
 
