@@ -92,7 +92,7 @@ This notebook:
 7. Computes the Power Spectral Density (PSD) for all bipolar channels.
 8. Automatically detects disconnected or flat channels based on PSD and excludes them from further spectral analysis.
 9. Exports PSD figures, annotation tables, and per-seizure analysis results to the [SOZ](SOZ) directory.
-10. Takes a spectogram of every channel for every seizure.
+10. Takes a spectogram of every channel for every seizure. - for now this is commented out
 
 ## Current questions and notes
 
