@@ -29,14 +29,18 @@ Create and activate a Python environment:
 conda create -n eeg python=3.11 -y
 conda activate eeg
 pip install mne pyedflib numpy scipy pandas matplotlib jupyterlab yasa
+
+
 ```
 
 Optional tools:
 - EDFbrowser for visual inspection of EDF files.
 - mdbtools for reading Compumedics .mdb event files:
+- interactive imaging of eeg traces
 
 ```bash
 sudo apt install mdbtools
+pip install mne-qt-browser ipympl PyQt6
 ```
 
 Sanity check:
@@ -63,14 +67,15 @@ Steps include:
    - recording duration,
    - start time,
    - signal units.
-3. Crop a short window, currently 90 seconds, load it into memory.
-4. Build a bipolar montage using adjacent contacts from the same electrode. Save the trace EEG
-5. Compute and save the PSD of the unfiltered bipolar signal.
-6. Apply notch filtering at 50 and it's harmonics and apply the selected frequency filter - for now 1-250Hz.
-7. Plot the filtered signal and compute its PSD for comparison with the unfiltered data.
-8. Compare selected channels and review activity in standard frequency bands.
-9. Create a per-channel summary table for flat, saturated, and high-noise channels.
-10. Save figures and channel-quality results.
+3. Extract annotations
+4. Crop a short window, currently 90 seconds, load it into memory.
+5. Build a bipolar montage using adjacent contacts from the same electrode. Save the trace EEG
+6. Compute and save the PSD of the unfiltered bipolar signal.
+7. Apply notch filtering at 50 and it's harmonics and apply the selected frequency filter - for now 1-250Hz.
+8. Plot the filtered signal and compute its PSD for comparison with the unfiltered data.
+9. Compare selected channels and review activity in standard frequency bands.
+10. Create a per-channel summary table for flat, saturated, and high-noise channels.
+11. Save figures and channel-quality results.
 
 ### 2. SOZ-focused seizure analysis
 
